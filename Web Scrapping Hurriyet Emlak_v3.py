@@ -1,3 +1,4 @@
+# # This is a Capstone Project for Data Science course given in Roermond, NL.
 
 # coding: utf-8
 
@@ -10,12 +11,13 @@
 
 # In[65]:
 
-
+# First, necessary libraries are imported.
 import pandas as pd
 import csv
 import requests
 from bs4 import BeautifulSoup
 
+# Global variables are defined.
 list_id= []
 price = []
 date = []
@@ -26,6 +28,7 @@ seller = []
 adres = []
 title = []
 
+# A for loop is set in order to scrape ads from hurriyetemlak.com. 
 for j in range():
     
     r = requests.get("https://www.hurriyetemlak.com/konut-satilik/villa/listeleme?pageSize=50&view=catalog&page={}".format(j))
@@ -33,6 +36,7 @@ for j in range():
     soup = BeautifulSoup(r.text,'html.parser')
     results = soup.find_all("a", attrs={'class':'overlay-link'})
 
+# Each tag belong to an ad is compiled into the corresponding list.
     for tag in results :
         price.append(tag.get('data-price'))
         date.append(tag.get('data-date'))
@@ -44,16 +48,17 @@ for j in range():
         title.append(tag.get('title'))
         list_id.append(tag.get('data-listing-id'))
 
-records={"list_id":list_id,"title": title, "price": price, "date":date, "area-m2": area, "owner":owner, "room": room, "seller": seller, "adres":adres, }
- 
-#w = csv.writer(open("hurriyet.csv", "w"))
+        # Lists above are merged into a dictionary.
+        records={"list_id":list_id,"title": title, "price": price, "date":date, "area-m2": area, "owner":owner, "room": room, "seller": seller, "adres":adres, }
+        
+        #w = csv.writer(open("hurriyet.csv", "w"))
 
-#for key, val in records.items():
+        #for key, val in records.items():
 
-        #w.writerow([key, val])
-df = pd.DataFrame(records)
- 
-df.to_csv("{}hurriyet.txt".format(j))
+            #w.writerow([key, val])
+        df = pd.DataFrame(records)
+        # The dictionary is exported into a txt file named "?hurriyet.txt", where ? is the number of the web page that is scraped. 
+        df.to_csv("{}hurriyet.txt".format(j))
 
 #df.tail(20)
 
@@ -66,12 +71,12 @@ df.to_csv("{}hurriyet.txt".format(j))
 
 # In[17]:
 
+# Aşağıdaki satır tekrar olmuş. ya yukarıdan ya da buradan silinebilir...
+# import pandas as pd 
 
-import pandas as pd
+df=pd.read_csv("520hurriyet.txt") #neden 520 onu anlamadım???
 
-df=pd.read_csv("520hurriyet.txt")
-
-for i in range(0,len(df.iloc[:,1])):
+for i in range(0,len(df.iloc[:,1])): 
                
     if df.iloc[i,1][0:5] == "https":
         df.loc[i,"adres"] = "New project without adres info"
